@@ -6,3 +6,13 @@
 
 @import './player.scss';
 @import './song.scss';
+@import './library.scss';
+body{
+    font-family: 'Lato', sans-serif;
+}
+h1,h2,h3,h4,h5,h6{
+    font-family: 'Montserrat', sans-serif;
+    color: rgb(54, 54, 54);
+    font-weight: 400;
+    color: rgb(100, 100, 100);
+}
