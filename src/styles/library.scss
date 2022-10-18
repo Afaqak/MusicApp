@@ -2,13 +2,17 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 14rem;
+    width: 15rem;
     height: 100% ;
+    background-color: white;
     box-shadow: 2px 2px 50px gray;
     overflow: scroll;
     transform: translateX(-100%);
     transition: all 0.5s ease;
-    z-index: 50;
+    
+    h2{
+       padding: 1rem; 
+    }
 }
 .library-songs{
     display: flex;

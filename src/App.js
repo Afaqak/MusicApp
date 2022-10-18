@@ -12,7 +12,8 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [songInfo,setSongInfo] = useState({
     currentTime: 0,
-    duration: 0
+    duration: 0,
+    animationPercentage: 0,
   })
   const audioRef = useRef(null);
   const getTime = (time) => {
@@ -24,16 +25,25 @@ function App() {
     //for the current time
     const current = e.target.currentTime;
     const duration = getTime(e.target.duration);
+    const roundedCurrent = Math.round(current);
+    const roundedDuration = Math.round(e.target.duration);
+    const animation = Math.round((roundedCurrent/roundedDuration)*100);
+  
+    setSongInfo({...songInfo,currentTime: current,duration: duration,animationPercentage: animation});
     // in minutes 
-    setSongInfo({...songInfo,currentTime: current,duration: duration})    
+  }
+  const songEndHandler = async () => {
+    let currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+    await setCurrentSong(songs[(currentIndex+1)%songs.length]);
+    if(isPlaying) audioRef.current.play();
   }
   return (
     <div className="App">
       <Nav libraryStatus={libraryStatus} setLibraryStatus={setLibraryStatus} />
       <Song currentSong={currentSong}  />
-      <Player setSongInfo={setSongInfo} songInfo={songInfo} audioRef={audioRef} currentSong={currentSong} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
+      <Player setSongs={setSongs} setCurrentSong={setCurrentSong} setSongInfo={setSongInfo} song={songs} songInfo={songInfo} audioRef={audioRef} currentSong={currentSong} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
       <Library libraryStatus={libraryStatus} isPlaying={isPlaying} setSongs={setSongs} audioRef={audioRef} songs={songs} setCurrentSong={setCurrentSong} />
-      <audio onTimeUpdate={timeUpdateHandler} onLoadedMetadata={timeUpdateHandler} ref={audioRef} src={currentSong.audio}></audio>
+      <audio onEnded={songEndHandler} onTimeUpdate={timeUpdateHandler} onLoadedMetadata={timeUpdateHandler} ref={audioRef} src={currentSong.audio}></audio>
     </div>
   );
 }
